@@ -7,11 +7,13 @@ var fifth =
 "DLLLRDDURDULRRLULURRDULDLUDLURDDURRLLRRLLULRDLDRDULRLLRDRUUULURRRLLRLDDDRDRRULDRRLLLLDLUULRRRURDDRULLULDDDLULRLRRRUDRURULUDDRULDUDRLDRRLURULRUULLLRUURDURLLULUURUULUUDLUDLRRULLLRRLRURDRRURDRULRURRUDUDDDRDDULDLURUDRDURLDLDLUDURLLRUULLURLDDDURDULRLUUUDLLRRLLUURRDUUDUUDUURURDRRRRRRRRRUDULDLULURUDUURDDULDUDDRDDRDRLRUUUUDLDLRDUURRLRUUDDDDURLRRULURDUUDLUUDUUURUUDRURDRDDDDULRLLRURLRLRDDLRUULLULULRRURURDDUULRDRRDRDLRDRRLDUDDULLDRUDDRRRD";
 
 
-var keypad = [  [1,2,3],
-                [4,5,6],
-                [7,8,9]  ];
+var keypad = [  [0, 0, 1, 0, 0],
+                [0, 2, 3, 4, 0],
+                [5, 6, 7, 8, 9],
+                [0,'A','B','C',0],
+                [0, 0, 'D', 0, 0]  ];
 
-var currentPos = {x: 1, y: 1};
+var currentPos = {x: 0, y: 2};
 
 var combination = [];
 combination.push(figureOutKeyBasedOnSequence(first));
@@ -25,19 +27,25 @@ console.log(combination);
 function figureOutKeyBasedOnSequence(sequence) {
     for(var i = 0; i < sequence.length; ++i) {
         var char = sequence.charAt(i);
+        var testPos = {x:currentPos.x, y:currentPos.y};
+
         switch(char){
             case 'U':
-                currentPos.y = clamp(currentPos.y-1, 0, 2);
+                testPos.y = clamp(testPos.y-1, 0, 4);
             break;
             case 'D':
-                currentPos.y = clamp(currentPos.y+1, 0, 2);
+                testPos.y = clamp(testPos.y+1, 0, 4);
             break;
             case 'L':
-                currentPos.x = clamp(currentPos.x-1, 0, 2);
+                testPos.x = clamp(testPos.x-1, 0, 4);
             break;
             case 'R':
-                currentPos.x = clamp(currentPos.x+1, 0, 2);
+                testPos.x = clamp(testPos.x+1, 0, 4);
             break;
+        }
+
+        if(keypad[testPos.y][testPos.x] != 0){
+            currentPos = testPos;
         }
     }
     return keypad[currentPos.y][currentPos.x];
